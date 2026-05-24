@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Env / secrets — never commit the real .env
+.env
+
+# Data & eval outputs (gitignored per PROJECT.md)
+data/
+eval/results/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

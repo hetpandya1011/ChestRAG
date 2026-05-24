@@ -1,0 +1,51 @@
+# The "conductor": brings up db + api + web on one private network with one command.
+# Docker auto-loads `.env` from this folder for ${VAR} substitution below.
+
+services:
+  db:
+    image: pgvector/pgvector:pg16   # official Postgres 16 image with the pgvector extension built in
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"               # host:container — lets you connect from your Mac too
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # named volume so DB data survives `down`/restart
+    healthcheck:                  # api waits until this passes before starting
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .                  # build context is the repo root (so it can see pyproject.toml)
+      dockerfile: services/api/Dockerfile
+    env_file: .env                # inject all .env vars into the container
+    environment:
+      PYTHONPATH: /app            # so `services.api.main` resolves from the mounted source
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app                   # live-mount the repo so code edits reload without rebuild
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  web:
+    build:
+      context: .
+      dockerfile: services/web/Dockerfile
+    env_file: .env
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+    depends_on:
+      - api
+    command: streamlit run services/web/app.py --server.port 8501 --server.address 0.0.0.0
+
+volumes:
+  pgdata:
