@@ -34,6 +34,17 @@ app = FastAPI(title="ChestRAG API", version="0.1.0")
 CITATION_RE = re.compile(r"\[(\d+)\]")
 
 
+def extract_cited(answer: str, n_nodes: int) -> list[int]:
+    """Citation indices the answer actually used: in first-appearance order,
+    de-duplicated, and limited to valid in-range sources."""
+    cited: list[int] = []
+    for match in CITATION_RE.findall(answer):
+        n = int(match)
+        if 1 <= n <= n_nodes and n not in cited:
+            cited.append(n)
+    return cited
+
+
 class QueryRequest(BaseModel):
     question: str
     top_k: int = 5
@@ -64,12 +75,8 @@ def query(req: QueryRequest) -> QueryResponse:
     nodes = retrieve(req.question, top_k=req.top_k)
     answer = generate_answer(req.question, nodes)
 
-    # Keep only the sources the answer actually cited, in order of first appearance.
-    cited_ns: list[int] = []
-    for match in CITATION_RE.findall(answer):
-        n = int(match)
-        if 1 <= n <= len(nodes) and n not in cited_ns:
-            cited_ns.append(n)
+    # Keep only the sources the answer actually cited.
+    cited_ns = extract_cited(answer, len(nodes))
 
     citations = []
     for n in cited_ns:
