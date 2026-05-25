@@ -1,0 +1,207 @@
+# Seed corpus for ChestRAG (Weekend 1) — the data-driven input to ingest/fetch.py.
+# Every entry has a freely downloadable PDF (arXiv / open-access). IDs verified via web search.
+#
+# Schema per paper:
+#   id        short slug (used as the local filename: data/raw/<id>.pdf)
+#   title     paper title
+#   authors   short author string
+#   year      publication year
+#   category  dataset | classifier | vision-language | zero-shot | foundation |
+#             report-generation | fairness | clinical-validation
+#   source    arxiv | cvf | pmc
+#   arxiv_id  arXiv identifier (null for non-arXiv sources)
+#   pdf_url   direct URL fetch.py downloads
+#   note      (optional) caveat for fetch.py / manual fallback
+
+papers:
+  # --- Datasets & benchmarks ---
+  - id: chestxray8
+    title: "ChestX-ray8: Hospital-scale Chest X-ray Database and Benchmarks on Weakly-Supervised Classification and Localization of Common Thorax Diseases"
+    authors: "Wang et al."
+    year: 2017
+    category: dataset
+    source: arxiv
+    arxiv_id: "1705.02315"
+    pdf_url: "https://arxiv.org/pdf/1705.02315"
+
+  - id: chexpert
+    title: "CheXpert: A Large Chest Radiograph Dataset with Uncertainty Labels and Expert Comparison"
+    authors: "Irvin et al."
+    year: 2019
+    category: dataset
+    source: arxiv
+    arxiv_id: "1901.07031"
+    pdf_url: "https://arxiv.org/pdf/1901.07031"
+
+  - id: mimic-cxr
+    title: "MIMIC-CXR-JPG, a large publicly available database of labeled chest radiographs"
+    authors: "Johnson et al."
+    year: 2019
+    category: dataset
+    source: arxiv
+    arxiv_id: "1901.07042"
+    pdf_url: "https://arxiv.org/pdf/1901.07042"
+    note: "arXiv MIMIC-CXR-JPG companion paper (clean PDF) in place of the Nature Sci Data database paper."
+
+  - id: padchest
+    title: "PadChest: A large chest x-ray image dataset with multi-label annotated reports"
+    authors: "Bustos et al."
+    year: 2019
+    category: dataset
+    source: arxiv
+    arxiv_id: "1901.07441"
+    pdf_url: "https://arxiv.org/pdf/1901.07441"
+
+  - id: vindr-cxr
+    title: "VinDr-CXR: An open dataset of chest X-rays with radiologist's annotations"
+    authors: "Nguyen et al."
+    year: 2022
+    category: dataset
+    source: arxiv
+    arxiv_id: "2012.15029"
+    pdf_url: "https://arxiv.org/pdf/2012.15029"
+
+  # --- CNN classifier / clinical baseline ---
+  - id: chexnet
+    title: "CheXNet: Radiologist-Level Pneumonia Detection on Chest X-Rays with Deep Learning"
+    authors: "Rajpurkar et al."
+    year: 2017
+    category: classifier
+    source: arxiv
+    arxiv_id: "1711.05225"
+    pdf_url: "https://arxiv.org/pdf/1711.05225"
+
+  # --- Vision-language pretraining ---
+  - id: convirt
+    title: "Contrastive Learning of Medical Visual Representations from Paired Images and Text"
+    authors: "Zhang et al."
+    year: 2020
+    category: vision-language
+    source: arxiv
+    arxiv_id: "2010.00747"
+    pdf_url: "https://arxiv.org/pdf/2010.00747"
+
+  - id: gloria
+    title: "GLoRIA: A Multimodal Global-Local Representation Learning Framework for Label-efficient Medical Image Recognition"
+    authors: "Huang et al."
+    year: 2021
+    category: vision-language
+    source: cvf
+    arxiv_id: null
+    pdf_url: "https://openaccess.thecvf.com/content/ICCV2021/papers/Huang_GLoRIA_A_Multimodal_Global-Local_Representation_Learning_Framework_for_Label-Efficient_Medical_ICCV_2021_paper.pdf"
+
+  - id: biovil-t
+    title: "Learning to Exploit Temporal Structure for Biomedical Vision-Language Processing (BioViL-T)"
+    authors: "Bannur et al."
+    year: 2023
+    category: vision-language
+    source: arxiv
+    arxiv_id: "2301.04558"
+    pdf_url: "https://arxiv.org/pdf/2301.04558"
+
+  - id: medclip
+    title: "MedCLIP: Contrastive Learning from Unpaired Medical Images and Text"
+    authors: "Wang et al."
+    year: 2022
+    category: vision-language
+    source: arxiv
+    arxiv_id: "2210.10163"
+    pdf_url: "https://arxiv.org/pdf/2210.10163"
+
+  - id: medklip
+    title: "MedKLIP: Medical Knowledge Enhanced Language-Image Pre-Training in Radiology"
+    authors: "Wu et al."
+    year: 2023
+    category: vision-language
+    source: arxiv
+    arxiv_id: "2301.02228"
+    pdf_url: "https://arxiv.org/pdf/2301.02228"
+
+  - id: cxr-clip
+    title: "CXR-CLIP: Toward Large Scale Chest X-ray Language-Image Pre-training"
+    authors: "You et al."
+    year: 2023
+    category: vision-language
+    source: arxiv
+    arxiv_id: "2310.13292"
+    pdf_url: "https://arxiv.org/pdf/2310.13292"
+
+  # --- Zero-shot / self-supervised ---
+  - id: chexzero
+    title: "Expert-level detection of pathologies from unannotated chest X-ray images via self-supervised learning (CheXzero)"
+    authors: "Tiu et al."
+    year: 2022
+    category: zero-shot
+    source: pmc
+    arxiv_id: null
+    pdf_url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9792370/pdf/"
+    note: "Nature Biomed Eng (paywalled); open via PMC. PMC may block automated PDF download — manual fallback into data/raw/chexzero.pdf if fetch fails."
+
+  # --- Foundation / generalist multimodal ---
+  - id: biomedclip
+    title: "BiomedCLIP: a multimodal biomedical foundation model pretrained from fifteen million scientific image-text pairs"
+    authors: "Zhang et al."
+    year: 2023
+    category: foundation
+    source: arxiv
+    arxiv_id: "2303.00915"
+    pdf_url: "https://arxiv.org/pdf/2303.00915"
+
+  - id: radfm
+    title: "Towards Generalist Foundation Model for Radiology by Leveraging Web-scale 2D&3D Medical Data (RadFM)"
+    authors: "Wu et al."
+    year: 2023
+    category: foundation
+    source: arxiv
+    arxiv_id: "2308.02463"
+    pdf_url: "https://arxiv.org/pdf/2308.02463"
+
+  - id: chexagent
+    title: "CheXagent: Towards a Foundation Model for Chest X-Ray Interpretation"
+    authors: "Chen et al."
+    year: 2024
+    category: foundation
+    source: arxiv
+    arxiv_id: "2401.12208"
+    pdf_url: "https://arxiv.org/pdf/2401.12208"
+
+  - id: chexfound
+    title: "Chest X-ray Foundation Model with Global and Local Representations Integration (CheXFound)"
+    authors: "Yang et al."
+    year: 2025
+    category: foundation
+    source: arxiv
+    arxiv_id: "2502.05142"
+    pdf_url: "https://arxiv.org/pdf/2502.05142"
+
+  # --- Report generation ---
+  - id: r2gengpt
+    title: "R2GenGPT: Radiology Report Generation with Frozen LLMs"
+    authors: "Wang et al."
+    year: 2023
+    category: report-generation
+    source: arxiv
+    arxiv_id: "2309.09812"
+    pdf_url: "https://arxiv.org/pdf/2309.09812"
+
+  # --- Fairness / limitations ---
+  - id: chexclusion
+    title: "CheXclusion: Fairness gaps in deep chest X-ray classifiers"
+    authors: "Seyyed-Kalantari et al."
+    year: 2020
+    category: fairness
+    source: arxiv
+    arxiv_id: "2003.00827"
+    pdf_url: "https://arxiv.org/pdf/2003.00827"
+    note: "Open-access stand-in for the paywalled Nature Medicine 'Underdiagnosis bias' paper; same lead author + same TPR-disparity analysis on MIMIC-CXR/ChestX-ray8/CheXpert."
+
+  # --- Clinical validation ---
+  - id: multicountry-validation
+    title: "Development and External Validation of an AI-Based Method for Scalable Chest Radiograph Diagnosis: A Multi-Country Cross-Sectional Study"
+    authors: "Yang et al."
+    year: 2024
+    category: clinical-validation
+    source: pmc
+    arxiv_id: null
+    pdf_url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11301699/pdf/"
+    note: "Open-access journal 'Research' (DOI 10.34133/research.0426). PMC may block automated PDF download — manual fallback into data/raw/multicountry-validation.pdf if fetch fails."

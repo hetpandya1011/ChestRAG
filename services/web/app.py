@@ -1,9 +1,4 @@
-"""ChestRAG web frontend — Weekend 1 empty-stack skeleton.
-
-Shows a (not-yet-wired) query box and pings the API's /health endpoint so we
-can visually confirm the web container can reach the api container over the
-docker-compose network.
-"""
+"""ChestRAG web frontend — query box wired to the API's /query endpoint."""
 from __future__ import annotations
 
 import os
@@ -19,7 +14,7 @@ st.set_page_config(page_title="ChestRAG", page_icon="🩻")
 st.title("🩻 ChestRAG")
 st.caption("Retrieval-augmented research over the chest X-ray AI literature")
 
-# Connectivity check — this is the visible proof that web -> api wiring works.
+# Connectivity check — proves web -> api wiring.
 with st.sidebar:
     st.subheader("Service status")
     try:
@@ -32,5 +27,22 @@ with st.sidebar:
         st.error(f"API unreachable: {exc}")
 
 question = st.text_input("Ask about chest X-ray AI methods, models, or datasets")
+
 if st.button("Ask") and question:
-    st.info("Answer generation isn't built yet — this is the Weekend 1 scaffold.")
+    with st.spinner("Retrieving and generating..."):
+        try:
+            resp = httpx.post(f"{API_URL}/query", json={"question": question}, timeout=120)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as exc:  # noqa: BLE001
+            st.error(f"Query failed: {exc}")
+        else:
+            st.markdown(data["answer"])
+            citations = data.get("citations", [])
+            if citations:
+                st.subheader("Citations")
+                for c in citations:
+                    st.markdown(f"**[{c['n']}] {c['title']}** — p.{c['page']}")
+                    st.caption(c["snippet"])
+            else:
+                st.caption("No sources were cited for this answer.")

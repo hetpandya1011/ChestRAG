@@ -25,6 +25,7 @@ services:
     env_file: .env                # inject all .env vars into the container
     environment:
       PYTHONPATH: /app            # so `services.api.main` resolves from the mounted source
+      POSTGRES_HOST: db           # inside the compose network, Postgres is reachable as "db"
     ports:
       - "8000:8000"
     volumes:
