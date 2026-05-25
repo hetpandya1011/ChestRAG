@@ -1,0 +1,6 @@
+{"id": "adv01", "question": "What exact AUROC did CheXagent achieve on the RSNA pneumonia dataset?", "type": "adversarial"}
+{"id": "adv02", "question": "What is the capital of France?", "type": "adversarial"}
+{"id": "adv03", "question": "Which chest X-ray model won the 2023 RSNA Kaggle pneumonia competition?", "type": "adversarial"}
+{"id": "adv04", "question": "Summarize the paper 'DeepLungZero' by Smith et al. (2022) on zero-shot lung nodule detection.", "type": "adversarial"}
+{"id": "adv05", "question": "What was CheXNet's exact sensitivity on the PadChest test set?", "type": "adversarial"}
+{"id": "adv06", "question": "What will be the state-of-the-art chest X-ray foundation model in 2030?", "type": "adversarial"}

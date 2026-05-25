@@ -1,1 +1,50 @@
-
+{"id": "q01", "question": "What strategies does CheXpert use to handle uncertain labels during training?", "gold_paper_ids": ["chexpert"], "type": "method"}
+{"id": "q02", "question": "How many chest radiographs and patients does the CheXpert dataset contain?", "gold_paper_ids": ["chexpert"], "type": "dataset"}
+{"id": "q03", "question": "What neural network architecture does CheXNet use to detect pneumonia, and on which dataset is it trained?", "gold_paper_ids": ["chexnet"], "type": "method"}
+{"id": "q04", "question": "How were the disease labels in the ChestX-ray8 / ChestX-ray14 dataset extracted from radiology reports?", "gold_paper_ids": ["chestxray8"], "type": "dataset"}
+{"id": "q05", "question": "What does the MIMIC-CXR dataset contain and how were its structured labels derived?", "gold_paper_ids": ["mimic-cxr"], "type": "dataset"}
+{"id": "q06", "question": "What is distinctive about PadChest's reports and its label taxonomy?", "gold_paper_ids": ["padchest"], "type": "dataset"}
+{"id": "q07", "question": "How were findings annotated in the VinDr-CXR dataset, and by how many radiologists?", "gold_paper_ids": ["vindr-cxr"], "type": "dataset"}
+{"id": "q08", "question": "How does CheXzero achieve zero-shot pathology detection without explicit training labels?", "gold_paper_ids": ["chexzero"], "type": "method"}
+{"id": "q09", "question": "What is ConVIRT's contrastive approach to learning medical visual representations from paired images and text?", "gold_paper_ids": ["convirt"], "type": "method"}
+{"id": "q10", "question": "How does GLoRIA learn global and local image representations from radiology reports?", "gold_paper_ids": ["gloria"], "type": "method"}
+{"id": "q11", "question": "What temporal modeling capability does BioViL-T add to biomedical vision-language processing?", "gold_paper_ids": ["biovil-t"], "type": "method"}
+{"id": "q12", "question": "How does MedCLIP train on unpaired medical images and text, and what loss replaces InfoNCE?", "gold_paper_ids": ["medclip"], "type": "method"}
+{"id": "q13", "question": "How does MedKLIP inject medical domain knowledge into language-image pretraining?", "gold_paper_ids": ["medklip"], "type": "method"}
+{"id": "q14", "question": "How does CXR-CLIP expand limited image-label data into image-text pairs for pretraining?", "gold_paper_ids": ["cxr-clip"], "type": "method"}
+{"id": "q15", "question": "What dataset was BiomedCLIP pretrained on, and how large is it?", "gold_paper_ids": ["biomedclip"], "type": "dataset"}
+{"id": "q16", "question": "What makes RadFM a generalist radiology model in terms of the data modalities it handles?", "gold_paper_ids": ["radfm"], "type": "method"}
+{"id": "q17", "question": "What is CheXagent and what benchmark is introduced to evaluate it?", "gold_paper_ids": ["chexagent"], "type": "method"}
+{"id": "q18", "question": "How was CheXFound pretrained, and what is its global-local representations integration (GLoRI) module for?", "gold_paper_ids": ["chexfound"], "type": "method"}
+{"id": "q19", "question": "How does R2GenGPT use frozen large language models for radiology report generation?", "gold_paper_ids": ["r2gengpt"], "type": "method"}
+{"id": "q20", "question": "What fairness gaps does CheXclusion find in deep chest X-ray classifiers, and across which patient attributes?", "gold_paper_ids": ["chexclusion"], "type": "method"}
+{"id": "q21", "question": "What did the multi-country external validation study conclude about AI chest radiograph diagnosis compared with radiologists?", "gold_paper_ids": ["multicountry-validation"], "type": "clinical"}
+{"id": "q22", "question": "Which chest X-ray interpretation tasks does CheXagent's CheXbench evaluate?", "gold_paper_ids": ["chexagent"], "type": "method"}
+{"id": "q23", "question": "Approximately how many images and studies are in the MIMIC-CXR database?", "gold_paper_ids": ["mimic-cxr"], "type": "dataset"}
+{"id": "q24", "question": "How does CheXpert's automated labeler capture uncertainty when reading radiology reports?", "gold_paper_ids": ["chexpert"], "type": "method"}
+{"id": "q25", "question": "How did CheXNet's pneumonia-detection performance compare with practicing radiologists?", "gold_paper_ids": ["chexnet"], "type": "method"}
+{"id": "q26", "question": "Can deep convolutional neural networks classify radiographs accurately when trained on only a small set of about 1,800 images?", "gold_paper_ids": ["W2530279937"], "type": "method"}
+{"id": "q27", "question": "How well does a deep-learning normal-versus-abnormal chest radiograph classifier generalize to unseen diseases such as tuberculosis and COVID-19?", "gold_paper_ids": ["W3196895296"], "type": "method"}
+{"id": "q28", "question": "How does CXR-Net provide explainable multitask diagnosis of COVID-19 pneumonia from chest X-rays?", "gold_paper_ids": ["W4308635297"], "type": "method"}
+{"id": "q29", "question": "How does ResNetFed use federated learning for privacy-preserving pneumonia detection from COVID-19 chest radiographs?", "gold_paper_ids": ["W4380849026"], "type": "method"}
+{"id": "q30", "question": "What is X-WIN's chest-radiograph world-model approach, and how does it address the 2D-projection limitation of CXRs?", "gold_paper_ids": ["W7106475402"], "type": "method"}
+{"id": "q31", "question": "How many images and how many distinct radiographic findings are labeled in PadChest?", "gold_paper_ids": ["padchest"], "type": "dataset"}
+{"id": "q32", "question": "How many images are in the released VinDr-CXR dataset, and how is it split into training and test sets?", "gold_paper_ids": ["vindr-cxr"], "type": "dataset"}
+{"id": "q33", "question": "Why does ConVIRT use radiology reports as a supervision signal instead of manual labels?", "gold_paper_ids": ["convirt"], "type": "method"}
+{"id": "q34", "question": "What biomedical vision-language tasks does BiomedCLIP improve on?", "gold_paper_ids": ["biomedclip"], "type": "method"}
+{"id": "q35", "question": "What evaluation benchmark does RadFM introduce for radiology tasks?", "gold_paper_ids": ["radfm"], "type": "method"}
+{"id": "q36", "question": "What learning signal lets CheXzero classify pathologies it was never explicitly trained on?", "gold_paper_ids": ["chexzero"], "type": "method"}
+{"id": "q37", "question": "How does GLoRIA improve label efficiency on downstream medical imaging tasks?", "gold_paper_ids": ["gloria"], "type": "method"}
+{"id": "q38", "question": "On which chest X-ray benchmarks is MedKLIP evaluated?", "gold_paper_ids": ["medklip"], "type": "method"}
+{"id": "q39", "question": "What downstream tasks does CheXFound generalize to beyond multilabel disease classification?", "gold_paper_ids": ["chexfound"], "type": "method"}
+{"id": "q40", "question": "Which datasets does R2GenGPT use to evaluate radiology report generation?", "gold_paper_ids": ["r2gengpt"], "type": "dataset"}
+{"id": "q41", "question": "Compare CheXagent and CheXzero as approaches to chest X-ray interpretation.", "gold_paper_ids": ["chexagent", "chexzero"], "type": "comparative"}
+{"id": "q42", "question": "Which methods use contrastive image-text pretraining on chest X-rays?", "gold_paper_ids": ["convirt", "gloria", "biovil-t", "medclip", "cxr-clip", "medklip"], "type": "comparative"}
+{"id": "q43", "question": "Which chest X-ray datasets pair images with free-text radiology reports?", "gold_paper_ids": ["mimic-cxr", "padchest"], "type": "comparative"}
+{"id": "q44", "question": "Which foundation models target radiology or chest X-ray interpretation?", "gold_paper_ids": ["chexagent", "chexfound", "radfm"], "type": "comparative"}
+{"id": "q45", "question": "Which large public chest X-ray datasets are commonly used to train classifiers?", "gold_paper_ids": ["chexpert", "chestxray8", "mimic-cxr", "vindr-cxr", "padchest"], "type": "comparative"}
+{"id": "q46", "question": "Which datasets provide radiologist-drawn bounding-box localization of thoracic findings?", "gold_paper_ids": ["vindr-cxr", "chestxray8"], "type": "comparative"}
+{"id": "q47", "question": "Which models are general biomedical or radiology foundation models rather than chest-X-ray-specific?", "gold_paper_ids": ["biomedclip", "radfm"], "type": "comparative"}
+{"id": "q48", "question": "Which methods specifically tackle the scarcity of paired image-text data for chest X-rays?", "gold_paper_ids": ["medclip", "cxr-clip"], "type": "comparative"}
+{"id": "q49", "question": "Which models can generate radiology report text from chest X-rays?", "gold_paper_ids": ["chexagent", "r2gengpt"], "type": "comparative"}
+{"id": "q50", "question": "Which works study how chest X-ray AI performs across different patient populations, devices, or sites?", "gold_paper_ids": ["chexclusion", "multicountry-validation", "W3196895296"], "type": "comparative"}

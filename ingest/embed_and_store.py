@@ -52,7 +52,12 @@ def load_nodes() -> list[TextNode]:
                 TextNode(
                     id_=c["chunk_id"],
                     text=text,
-                    metadata={"paper_id": c["paper_id"], "title": c["title"], "page": c["page"]},
+                    metadata={
+                        "paper_id": c["paper_id"],
+                        "title": c["title"],
+                        "page": c["page"],
+                        "section": c.get("section"),
+                    },
                 )
             )
     return nodes

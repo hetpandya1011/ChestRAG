@@ -18,6 +18,7 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SEED_FILE = REPO_ROOT / "ingest" / "seed_papers.yaml"
+CORPUS_FILE = REPO_ROOT / "data" / "corpus.jsonl"
 RAW_DIR = REPO_ROOT / "data" / "raw"
 PARSED_DIR = REPO_ROOT / "data" / "parsed"
 
@@ -27,9 +28,17 @@ MIN_CHARS = 1000
 
 
 def load_metadata() -> dict[str, dict]:
-    with SEED_FILE.open() as f:
-        papers = yaml.safe_load(f)["papers"]
-    return {p["id"]: p for p in papers}
+    """Merge metadata from the curated seeds + the discovered corpus, keyed by id."""
+    meta: dict[str, dict] = {}
+    if SEED_FILE.exists():
+        for p in yaml.safe_load(SEED_FILE.read_text())["papers"]:
+            meta[p["id"]] = p
+    if CORPUS_FILE.exists():
+        for line in CORPUS_FILE.read_text().splitlines():
+            if line.strip():
+                p = json.loads(line)
+                meta.setdefault(p["id"], p)
+    return meta
 
 
 def parse_pdf(path: Path) -> tuple[list[dict], int]:
