@@ -36,8 +36,9 @@ EMBED_MODEL = "text-embedding-3-small"
 EMBED_DIM = 1536
 TABLE_NAME = "chunks"          # PGVectorStore creates the physical table "data_chunks"
 
-# Ingest runs on the HOST, connecting to the port docker-compose maps to localhost.
-DB_HOST = "localhost"
+# Host from env: "localhost" for the local docker-compose DB, or the RDS endpoint when
+# loading the cloud database from this machine. Falls back to localhost for local use.
+DB_HOST = os.getenv("POSTGRES_HOST", "localhost")
 
 
 def load_nodes() -> list[TextNode]:
