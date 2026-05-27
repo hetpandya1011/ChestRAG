@@ -26,17 +26,40 @@ with st.sidebar:
     except Exception as exc:  # noqa: BLE001
         st.error(f"API unreachable: {exc}")
 
+# Mode picks the endpoint: RAG = fixed retrieve->generate; Agent = LLM-routed tool use.
+mode = st.radio(
+    "Mode",
+    ["RAG", "Agent"],
+    horizontal=True,
+    help=(
+        "RAG: always retrieves from the corpus, then answers (fast, fixed pipeline). "
+        "Agent: the model chooses tools — corpus search and/or live HuggingFace model "
+        "lookup (license, downloads). Use Agent for questions that mix literature with "
+        "model-ecosystem facts."
+    ),
+)
 question = st.text_input("Ask about chest X-ray AI methods, models, or datasets")
 
 if st.button("Ask") and question:
-    with st.spinner("Retrieving and generating..."):
+    endpoint = "/agent" if mode == "Agent" else "/query"
+    spinner = "Agent working (choosing tools)..." if mode == "Agent" else "Retrieving..."
+    with st.spinner(spinner):
         try:
-            resp = httpx.post(f"{API_URL}/query", json={"question": question}, timeout=120)
+            resp = httpx.post(f"{API_URL}{endpoint}", json={"question": question}, timeout=120)
             resp.raise_for_status()
             data = resp.json()
         except Exception as exc:  # noqa: BLE001
-            st.error(f"Query failed: {exc}")
+            st.error(f"Request failed: {exc}")
         else:
+            # In Agent mode, surface what the agent actually did (the agentic proof).
+            steps = data.get("steps", [])
+            if steps:
+                tools_used = ", ".join(f"`{s['tool']}`" for s in steps)
+                st.info(f"🛠️ Agent called {len(steps)} tool(s): {tools_used}")
+                with st.expander("Tool-call trace"):
+                    for i, s in enumerate(steps, start=1):
+                        st.markdown(f"{i}. **{s['tool']}** — `{s['args']}`")
+
             st.markdown(data["answer"])
             citations = data.get("citations", [])
             if citations:
@@ -44,5 +67,5 @@ if st.button("Ask") and question:
                 for c in citations:
                     st.markdown(f"**[{c['n']}] {c['title']}** — p.{c['page']}")
                     st.caption(c["snippet"])
-            else:
+            elif mode == "RAG":
                 st.caption("No sources were cited for this answer.")

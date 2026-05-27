@@ -1,7 +1,8 @@
-"""ChestRAG API — Weekend 1.
+"""ChestRAG API.
 
 /health   liveness probe (used by the web container).
-/query    retrieve -> generate -> return a grounded answer + the cited sources.
+/query    retrieve -> generate -> return a grounded answer + the cited sources (fixed RAG).
+/agent    tool-use loop: the LLM chooses search_corpus and/or hf_model_lookup (agentic RAG).
 """
 from __future__ import annotations
 
@@ -13,6 +14,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from services.api.agent import run_agent
 from services.api.generate import generate_answer
 from services.api.retrieval import retrieve
 
@@ -63,23 +65,21 @@ class QueryResponse(BaseModel):
     citations: list[Citation]
 
 
-@app.get("/health")
-def health() -> dict[str, str]:
-    """Liveness probe. The web container pings this to prove connectivity."""
-    return {"status": "ok"}
+class ToolCall(BaseModel):
+    tool: str
+    args: dict
 
 
-@app.post("/query", response_model=QueryResponse)
-def query(req: QueryRequest) -> QueryResponse:
-    t0 = time.perf_counter()
-    nodes = retrieve(req.question, top_k=req.top_k)
-    answer = generate_answer(req.question, nodes)
+class AgentResponse(BaseModel):
+    answer: str
+    citations: list[Citation]
+    steps: list[ToolCall]  # the tools the agent chose to call, in order
 
-    # Keep only the sources the answer actually cited.
-    cited_ns = extract_cited(answer, len(nodes))
 
+def build_citations(answer: str, nodes: list) -> list[Citation]:
+    """Turn the sources the answer cited ([n] markers) into Citation objects."""
     citations = []
-    for n in cited_ns:
+    for n in extract_cited(answer, len(nodes)):
         node = nodes[n - 1].node
         meta = node.metadata
         citations.append(
@@ -91,6 +91,22 @@ def query(req: QueryRequest) -> QueryResponse:
                 snippet=" ".join(node.get_content().split())[:240],
             )
         )
+    return citations
+
+
+@app.get("/health")
+def health() -> dict[str, str]:
+    """Liveness probe. The web container pings this to prove connectivity."""
+    return {"status": "ok"}
+
+
+@app.post("/query", response_model=QueryResponse)
+def query(req: QueryRequest) -> QueryResponse:
+    """Fixed RAG path: always retrieve, then generate. No tool routing."""
+    t0 = time.perf_counter()
+    nodes = retrieve(req.question, top_k=req.top_k)
+    answer = generate_answer(req.question, nodes)
+    citations = build_citations(answer, nodes)
 
     latency_ms = round((time.perf_counter() - t0) * 1000)
     log.info(
@@ -101,3 +117,23 @@ def query(req: QueryRequest) -> QueryResponse:
         latency_ms=latency_ms,
     )
     return QueryResponse(answer=answer, citations=citations)
+
+
+@app.post("/agent", response_model=AgentResponse)
+def agent(req: QueryRequest) -> AgentResponse:
+    """Agentic path: the LLM picks tools (search_corpus and/or hf_model_lookup)."""
+    t0 = time.perf_counter()
+    result = run_agent(req.question)
+    citations = build_citations(result["answer"], result["sources"])
+    steps = [ToolCall(tool=s["tool"], args=s["args"]) for s in result["steps"]]
+
+    latency_ms = round((time.perf_counter() - t0) * 1000)
+    log.info(
+        "agent",
+        question=req.question,
+        n_tool_calls=len(steps),
+        tools=[s.tool for s in steps],
+        n_cited=len(citations),
+        latency_ms=latency_ms,
+    )
+    return AgentResponse(answer=result["answer"], citations=citations, steps=steps)

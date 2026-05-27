@@ -52,7 +52,7 @@ This project is designed to honestly check the following JD requirements across 
 - pgvector in Postgres for vector storage
 - Hybrid retrieval (dense + BM25) with cross-encoder re-ranking
 - Citation enforcement (every claim ties to a retrieved chunk)
-- One agent tool with function calling (HuggingFace model card lookup OR live arXiv search — pick one)
+- One agent tool with function calling: HuggingFace model card lookup (returns license, benchmarks, downloads, code snippets for a given model). Design rationale: the agent tool must do something the corpus *can't* — return live model-ecosystem data — not something the corpus already does (retrieve papers). This is what keeps the agent path architecturally distinct rather than a slower duplicate of RAG.
 - Evaluation harness with hand-built question set and LLM-as-judge
 - Multi-model benchmarking (Claude vs GPT-4 vs Gemini) on eval set
 - Docker + docker-compose for local orchestration
@@ -89,9 +89,9 @@ This project is designed to honestly check the following JD requirements across 
 │        ▼                          ▼      │
 │  ┌──────────┐              ┌──────────┐ │
 │  │ pgvector │              │ HF tool  │ │  ← optional agent path
-│  │ (RDS)    │              │ lookup   │ │
-│  └──────────┘              └──────────┘ │
-└─────────────────────────────────────────┘
+│  │ (RDS)    │              │ lookup   │ │  ← live model-ecosystem info
+│  └──────────┘              └──────────┘ │     (license/benchmarks/downloads),
+└─────────────────────────────────────────┘     NOT papers — that's the corpus's job
          │
          ▼
 ┌─────────────────┐
@@ -217,8 +217,8 @@ Each weekend is one architectural decision that covers multiple JD requirements.
 **Deliverable:**
 - Run eval set against Claude, GPT-4, and Gemini; record cost / latency / quality trade-offs in a table
 - Document the model selection decision in README
-- Add ONE agent tool with Anthropic function calling (recommendation: live arXiv search OR HuggingFace model card lookup — pick the one with cleaner API)
-- Router logic: simple queries → pure RAG path; multi-step queries → agent path
+- Add ONE agent tool with function calling: HuggingFace model card lookup (license, current benchmarks, downloads, code snippets, maintenance status for a named model). Chosen because it returns operational/ecosystem data the papers don't contain — the agent must do something the corpus *can't*, not duplicate the corpus's own retrieval path.
+- Router logic: literature questions → pure RAG path; "what does this model look like today" questions → agent path
 - Deploy: EC2 t3.small running Docker, RDS Postgres for pgvector, S3 for raw PDFs
 - Public URL accessible (with Nginx + Let's Encrypt for HTTPS)
 - Document the AWS architecture and manual deploy steps in `infra/aws_setup.md`
@@ -302,10 +302,9 @@ Brief explanation of each component.
 
 ## Open Questions (Discuss in First Session)
 
-1. Which agent tool — live arXiv search or HuggingFace model card lookup? Pick based on which has cleaner API and clearer demo value.
-2. AWS region: us-east-1 (cheapest, biggest) vs. ca-central-1 (closer to Toronto, slightly pricier).
-3. RDS instance size — t4g.micro to keep costs down, or t4g.small for headroom?
-4. Eval question format — start with a proposed JSONL schema in Weekend 2.
+1. AWS region: us-east-1 (cheapest, biggest) vs. ca-central-1 (closer to Toronto, slightly pricier).
+2. RDS instance size — t4g.micro to keep costs down, or t4g.small for headroom?
+3. Eval question format — start with a proposed JSONL schema in Weekend 2.
 
 ## Starting Point
 

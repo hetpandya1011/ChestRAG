@@ -18,3 +18,6 @@ eval/results/
 .DS_Store
 .vscode/
 .idea/
+
+# Claude Code local config
+.claude/
