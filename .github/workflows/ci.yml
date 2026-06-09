@@ -13,7 +13,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: pip install ".[dev]"
+        # Install api + ingest extras so tests can import everything they touch.
+        # The dep split (commit aaac945) moved fastapi/llama-index/openai out of
+        # the base; CI needs them back to import services.api.* and ingest.*.
+        run: pip install ".[api,ingest,dev]"
       - name: Lint (ruff)
         run: ruff check .
       - name: Test (pytest)
