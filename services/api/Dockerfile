@@ -9,7 +9,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # by docker-compose for dev, so edits reload without rebuilding.)
 COPY pyproject.toml ./
 COPY services ./services
-RUN pip install --no-cache-dir .
+# Install only the api-runtime extras (FastAPI, LlamaIndex, pgvector, LLM SDKs).
+# Skips sentence-transformers/pymupdf/yaml that this container never uses, which
+# keeps the image small (and the EC2 disk happy at build time).
+RUN pip install --no-cache-dir ".[api]"
 
 EXPOSE 8000
 # Default command; docker-compose overrides this with --reload for dev.
